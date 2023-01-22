@@ -1,4 +1,4 @@
-# Properties For MeetingScheduler
+# Properties For TicketDepot
 
 1. ***Variable transition*** numEvents increases by 1 when createEvent is called
 2. ***Variable transition*** after createEvent is called, eventsMap[numEvents].ticketsRemaining should only decrease (in reality new events can be started at old eventIds)
