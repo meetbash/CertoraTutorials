@@ -24,11 +24,11 @@ import "./ERC20.sol";
 contract Pool is ERC20 {
     address token0;
     address token1;
-    address owner;
+    address public owner;
 
-    uint token0Amount;
-    uint token1Amount;
-    uint K;
+    uint public token0Amount;
+    uint public token1Amount;
+    uint public K;
 
     // assigning values on constructor - specifying 2 tokens and the owner is the creator of the pool
     constructor(address _token0, address _token1) {
@@ -143,5 +143,13 @@ contract Pool is ERC20 {
         IERC20(token0).transfer(user, pay_in_0);
         IERC20(token1).transfer(user, pay_in_1);
     }    
-    
+
+    function token0Balance(address user) public view returns (uint256) {
+        return IERC20(token0).balanceOf(user);
+    }
+
+    function token1Balance(address user) public view returns (uint256) {
+        return IERC20(token1).balanceOf(user);
+    }
+
 }
