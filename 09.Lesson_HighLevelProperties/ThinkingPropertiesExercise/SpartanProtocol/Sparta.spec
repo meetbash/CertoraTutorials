@@ -8,27 +8,34 @@ methods {
     token0Amount() returns uint256 envfree
     token1Amount() returns uint256 envfree
     K() returns uint256 envfree
+
+    // ERC20 functions
+    balanceOf(address) returns uint256 => DISPATCHER(true)
 }
 
-invariant distinctTokens()
-    getToken0DepositAddress() != getToken1DepositAddress()
+rule addLiqDecreasesBalanceIncreasesLPForUser(env e, method f, address user) {
 
-rule addLiqDecreasesBalanceIncreasesLPForUser(env e, address user) {
-
-    require (user == owner());
+    // require (getToken0DepositAddress() == getToken1DepositAddress());
+    require (user == owner() && user != currentContract);
     init_pool(e);
-
-    uint256 token0Amt = token0Amount();
-    uint256 token1Amt = token1Amount();
 
     uint256 balanceToken0Before = token0Balance(user);
     uint256 balanceToken1Before = token1Balance(user);
+
+    uint contractToken0BalanceBefore = token0Balance(currentContract);
+    uint contractToken1BalanceBefore = token1Balance(currentContract);
     
     add_liquidity(e);
+    // calldataarg args;
+    // f(e, args);
     
     uint256 balanceToken0After = token0Balance(user);
     uint256 balanceToken1After = token1Balance(user);
 
+    uint contractToken0BalanceAfter = token0Balance(currentContract);
+    uint contractToken1BalanceAfter = token1Balance(currentContract);
+
     assert (balanceToken0Before >= balanceToken0After && balanceToken1Before >= balanceToken1After), "user's token balance increased after add_liq()";
+    assert (contractToken0BalanceBefore <= contractToken0BalanceAfter && contractToken1BalanceBefore >= contractToken1BalanceAfter), "contracts's token balance decreased after add_liq()";
 }
 

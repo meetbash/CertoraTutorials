@@ -144,13 +144,12 @@ contract Pool is ERC20 {
         IERC20(token1).transfer(user, pay_in_1);
     }    
 
-    // HC: utility functions
-    function getTokenBalance(address token_, address user) public view returns (uint256) {
-        return IERC20(token_).balanceOf(user);
+    function token0Balance(address user) public view returns (uint256) {
+        return IERC20(token0).balanceOf(user);
     }
 
-    function getK() public view returns (uint256) {
-        return K;
+    function token1Balance(address user) public view returns (uint256) {
+        return IERC20(token1).balanceOf(user);
     }
 
 }
